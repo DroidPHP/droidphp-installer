@@ -1,0 +1,15 @@
+diff -rupN php-5.5.9.orig/ext/standard/proc_open.c php-5.5.9/ext/standard/proc_open.c
+--- php-5.5.9.orig/ext/standard/proc_open.c	2014-02-05 15:30:36.000000000 +0530
++++ php-5.5.9/ext/standard/proc_open.c	2014-11-21 12:42:37.636075998 +0530
+@@ -859,9 +859,9 @@ PHP_FUNCTION(proc_open)
+ 		}
+ 
+ 		if (env.envarray) {
+-			execle("/bin/sh", "sh", "-c", command, NULL, env.envarray);
++			execle("/system/bin/sh", "sh", "-c", command, NULL, env.envarray);
+ 		} else {
+-			execl("/bin/sh", "sh", "-c", command, NULL);
++			execl("/system/bin/sh", "sh", "-c", command, NULL);
+ 		}
+ 		_exit(127);
+ 

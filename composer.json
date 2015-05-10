@@ -1,0 +1,38 @@
+{
+    "name": "droidphp/droidphp-installer",
+    "description": "The official installer to build components for droidphp",
+    "keywords": [
+        "droidphp",
+        "android",
+        "webserver",
+        "php"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "DroidPHP Community",
+            "homepage": "http://github.com/droidphp"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"Droidphp\\": "src/Droidphp/"}
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "guzzlehttp/guzzle": "~4.0",
+        "guzzlehttp/progress-subscriber": "~1.1",
+        "symfony/console": "~2.5",
+        "symfony/filesystem": "~2.5",
+        "symfony/finder": "~2.3",
+        "raulfraile/distill": "~0.9,!=0.9.3,!=0.9.4",
+        "symfony/yaml": "~2.6"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "bin": [
+        "compile"
+    ]
+}

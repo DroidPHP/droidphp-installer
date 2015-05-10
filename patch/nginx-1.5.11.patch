@@ -1,0 +1,98 @@
+diff -rupN nginx-1.5.11.orig/auto/feature nginx-1.5.11/auto/feature
+--- nginx-1.5.11.orig/auto/feature	2014-03-04 17:09:24.000000000 +0530
++++ nginx-1.5.11/auto/feature	2015-04-17 10:57:26.002587700 +0530
+@@ -121,3 +121,5 @@ else
+ fi
+ 
+ rm -rf $NGX_AUTOTEST*
++
++ngx_found=yes
+diff -rupN nginx-1.5.11.orig/auto/lib/md5/conf nginx-1.5.11/auto/lib/md5/conf
+--- nginx-1.5.11.orig/auto/lib/md5/conf	2014-03-04 17:09:24.000000000 +0530
++++ nginx-1.5.11/auto/lib/md5/conf	2015-04-17 10:56:13.594584698 +0530
+@@ -2,7 +2,6 @@
+ # Copyright (C) Igor Sysoev
+ # Copyright (C) Nginx, Inc.
+ 
+-
+ if [ $MD5 != NONE ]; then
+ 
+     if grep MD5_Init $MD5/md5.h 2>&1 >/dev/null; then
+diff -rupN nginx-1.5.11.orig/auto/sources nginx-1.5.11/auto/sources
+--- nginx-1.5.11.orig/auto/sources	2014-03-04 17:09:24.000000000 +0530
++++ nginx-1.5.11/auto/sources	2015-04-17 11:00:48.630596100 +0530
+@@ -108,8 +108,8 @@ WIN32_SELECT_SRCS=src/event/modules/ngx_
+ POLL_MODULE=ngx_poll_module
+ POLL_SRCS=src/event/modules/ngx_poll_module.c
+ 
+-KQUEUE_MODULE=ngx_kqueue_module
+-KQUEUE_SRCS=src/event/modules/ngx_kqueue_module.c
++#KQUEUE_MODULE=ngx_kqueue_module
++#KQUEUE_SRCS=src/event/modules/ngx_kqueue_module.c
+ 
+ DEVPOLL_MODULE=ngx_devpoll_module
+ DEVPOLL_SRCS=src/event/modules/ngx_devpoll_module.c
+diff -rupN nginx-1.5.11.orig/auto/types/sizeof nginx-1.5.11/auto/types/sizeof
+--- nginx-1.5.11.orig/auto/types/sizeof	2014-03-04 17:09:24.000000000 +0530
++++ nginx-1.5.11/auto/types/sizeof	2015-04-17 10:56:13.594584698 +0530
+@@ -47,6 +47,7 @@ fi
+ 
+ rm -rf $NGX_AUTOTEST*
+ 
++ngx_size=4
+ 
+ case $ngx_size in
+     4)
+diff -rupN nginx-1.5.11.orig/auto/unix nginx-1.5.11/auto/unix
+--- nginx-1.5.11.orig/auto/unix	2014-03-04 17:09:24.000000000 +0530
++++ nginx-1.5.11/auto/unix	2015-04-17 10:56:13.594584698 +0530
+@@ -67,7 +67,8 @@ if [ $ngx_found = yes ]; then
+     EVENT_FOUND=YES
+ fi
+ 
+-
++NGX_KQUEUE_CHECKED=
++ngx_found=no
+ if test -z "$NGX_KQUEUE_CHECKED"; then
+     ngx_feature="kqueue"
+     ngx_feature_name="NGX_HAVE_KQUEUE"
+diff -rupN nginx-1.5.11.orig/src/event/modules/ngx_devpoll_module.c nginx-1.5.11/src/event/modules/ngx_devpoll_module.c
+--- nginx-1.5.11.orig/src/event/modules/ngx_devpoll_module.c	2014-03-04 17:09:24.000000000 +0530
++++ nginx-1.5.11/src/event/modules/ngx_devpoll_module.c	2015-04-17 10:56:13.594584698 +0530
+@@ -9,8 +9,12 @@
+ #include <ngx_core.h>
+ #include <ngx_event.h>
+ 
++#include <sys/poll.h>
+ 
+-#if (NGX_TEST_BUILD_DEVPOLL)
++
++
++
++#if (NGX_TEST_BUILD_DEVPOLL || 1)
+ 
+ /* Solaris declarations */
+ 
+diff -rupN nginx-1.5.11.orig/src/event/modules/ngx_epoll_module.c nginx-1.5.11/src/event/modules/ngx_epoll_module.c
+--- nginx-1.5.11.orig/src/event/modules/ngx_epoll_module.c	2014-03-04 17:09:24.000000000 +0530
++++ nginx-1.5.11/src/event/modules/ngx_epoll_module.c	2015-04-17 10:56:13.594584698 +0530
+@@ -9,6 +9,8 @@
+ #include <ngx_core.h>
+ #include <ngx_event.h>
+ 
++#include <sys/epoll.h>
++
+ 
+ #if (NGX_TEST_BUILD_EPOLL)
+ 
+diff -rupN nginx-1.5.11.orig/src/os/unix/ngx_shmem.c nginx-1.5.11/src/os/unix/ngx_shmem.c
+--- nginx-1.5.11.orig/src/os/unix/ngx_shmem.c	2014-03-04 17:09:25.000000000 +0530
++++ nginx-1.5.11/src/os/unix/ngx_shmem.c	2015-04-17 10:56:13.594584698 +0530
+@@ -8,7 +8,6 @@
+ #include <ngx_config.h>
+ #include <ngx_core.h>
+ 
+-
+ #if (NGX_HAVE_MAP_ANON)
+ 
+ ngx_int_t

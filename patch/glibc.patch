@@ -1,0 +1,86 @@
+diff -rupN glibc-2.19.orig/libio/iopopen.c glibc-2.19/libio/iopopen.c
+--- glibc-2.19.orig/libio/iopopen.c	2014-02-07 14:34:38.000000000 +0530
++++ glibc-2.19/libio/iopopen.c	2015-05-06 22:56:58.326000281 +0530
+@@ -222,7 +222,7 @@ _IO_new_proc_open (fp, command, mode)
+ 	    _IO_close (fd);
+ 	}
+ 
+-      _IO_execl ("/bin/sh", "sh", "-c", command, (char *) 0);
++      _IO_execl ("/system/bin/sh", "sh", "-c", command, (char *) 0);
+       _IO__exit (127);
+     }
+   _IO_close (child_end);
+diff -rupN glibc-2.19.orig/libio/oldiopopen.c glibc-2.19/libio/oldiopopen.c
+--- glibc-2.19.orig/libio/oldiopopen.c	2014-02-07 14:34:38.000000000 +0530
++++ glibc-2.19/libio/oldiopopen.c	2015-05-06 22:57:21.986001262 +0530
+@@ -165,7 +165,7 @@ _IO_old_proc_open (fp, command, mode)
+       for (p = old_proc_file_chain; p; p = p->next)
+ 	_IO_close (_IO_fileno ((_IO_FILE *) p));
+ 
+-      _IO_execl ("/bin/sh", "sh", "-c", command, (char *) 0);
++      _IO_execl ("/system/bin/sh", "sh", "-c", command, (char *) 0);
+       _IO__exit (127);
+     }
+   _IO_close (child_end);
+diff -rupN glibc-2.19.orig/resolv/resolv.h glibc-2.19/resolv/resolv.h
+--- glibc-2.19.orig/resolv/resolv.h	2014-02-07 14:34:38.000000000 +0530
++++ glibc-2.19/resolv/resolv.h	2015-05-06 23:01:44.718012154 +0530
+@@ -170,7 +170,7 @@ typedef struct __res_state *res_state;
+  */
+ 
+ #ifndef _PATH_RESCONF
+-#define _PATH_RESCONF        "/etc/resolv.conf"
++#define _PATH_RESCONF        "/data/data/org.opendroidphp/etc/resolv.conf"
+ #endif
+ 
+ struct res_sym {
+diff -rupN glibc-2.19.orig/sysdeps/generic/paths.h glibc-2.19/sysdeps/generic/paths.h
+--- glibc-2.19.orig/sysdeps/generic/paths.h	2014-02-07 14:34:38.000000000 +0530
++++ glibc-2.19/sysdeps/generic/paths.h	2015-05-06 22:50:34.633984374 +0530
+@@ -33,12 +33,12 @@
+ #define	_PATHS_H_
+ 
+ /* Default search path. */
+-#define	_PATH_DEFPATH	"/usr/bin:/bin"
++#define	_PATH_DEFPATH	"/usr/bin:/bin:/system/bin:/system/xbin"
+ /* All standard utilities path. */
+ #define	_PATH_STDPATH \
+-	"/usr/bin:/bin:/usr/sbin:/sbin"
++	"/usr/bin:/bin:/usr/sbin:/sbin:/system/bin:/system/xbin"
+ 
+-#define	_PATH_BSHELL	"/bin/sh"
++#define	_PATH_BSHELL	"/system/bin/sh"
+ #define	_PATH_CONSOLE	"/dev/console"
+ #define	_PATH_CSHELL	"/bin/csh"
+ #define	_PATH_DEVDB	"/var/run/dev.db"
+diff -rupN glibc-2.19.orig/sysdeps/posix/system.c glibc-2.19/sysdeps/posix/system.c
+--- glibc-2.19.orig/sysdeps/posix/system.c	2014-02-07 14:34:38.000000000 +0530
++++ glibc-2.19/sysdeps/posix/system.c	2015-05-06 22:51:19.885986250 +0530
+@@ -26,7 +26,7 @@
+ #include <sysdep-cancel.h>
+ 
+ 
+-#define	SHELL_PATH	"/bin/sh"	/* Path of the shell.  */
++#define	SHELL_PATH	"/system/bin/sh"	/* Path of the shell.  */
+ #define	SHELL_NAME	"sh"		/* Name to give it.  */
+ 
+ 
+diff -rupN glibc-2.19.orig/sysdeps/unix/sysv/linux/paths.h glibc-2.19/sysdeps/unix/sysv/linux/paths.h
+--- glibc-2.19.orig/sysdeps/unix/sysv/linux/paths.h	2014-02-07 14:34:38.000000000 +0530
++++ glibc-2.19/sysdeps/unix/sysv/linux/paths.h	2015-05-06 22:54:29.605994115 +0530
+@@ -33,12 +33,12 @@
+ #define	_PATHS_H_
+ 
+ /* Default search path. */
+-#define	_PATH_DEFPATH	"/usr/bin:/bin"
++#define	_PATH_DEFPATH	"/usr/bin:/bin:/system/bin:/system/xbin"
+ /* All standard utilities path. */
+ #define	_PATH_STDPATH \
+-	"/usr/bin:/bin:/usr/sbin:/sbin"
++	"/usr/bin:/bin:/usr/sbin:/sbin:/system/bin:/system/xbin"
+ 
+-#define	_PATH_BSHELL	"/bin/sh"
++#define	_PATH_BSHELL	"/system/bin/sh"
+ #define	_PATH_CONSOLE	"/dev/console"
+ #define	_PATH_CSHELL	"/bin/csh"
+ #define	_PATH_DEVDB	"/var/run/dev.db"
