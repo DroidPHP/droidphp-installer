@@ -34,7 +34,7 @@ Using the installer
 
 **1. Setup new project**
 
-Execute the `new` command and provide the name of your project:
+Execute the `build:setup` command and provide the name of your project:
 
 ```bash
 # Linux, Mac OS X
